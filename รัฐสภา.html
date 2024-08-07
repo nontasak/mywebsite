@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+        <link href="/build/css/broadcasts.css" rel="stylesheet"/>
+    <link href="https://www.tpchannel.org/vendors/video-js/video-js.css" rel="stylesheet" />
+    <link href="https://www.tpchannel.org/vendors/video-js/videojs-http-source-selector.css" rel="stylesheet" />
+    <link href="https://www.tpchannel.org/vendors/video-js/video-js-fantasy.css" rel="stylesheet">
+
+
+                            <h5 class="mnmd-carousel-heading__title">
+                                ถ่ายทอดสดโทรทัศน์รัฐสภา
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="row flexbox justify-content-center align-items-center">
+                    <div class="col-sm-12">
+                        <video id="live-stream" class="video-js vjs-theme-fantasy" controls>
+                        </video>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- .site-wrapper -->
+    <!-- Vendor -->
+    <script type="text/javascript" src="https://www.tpchannel.org/frontend/js/jquery.js"></script>
+    <script type="text/javascript" src="https://www.tpchannel.org/frontend/js/vendors.js"></script>
+    <!-- Theme Scripts -->
+    <script type="text/javascript" src="https://www.tpchannel.org/frontend/js/scripts.min.js"></script>
+    <!-- Tempus Dominus JavaScript -->
+    <script src="https://www.tpchannel.org/vendors/tempus-dominus/popper.min.js"></script>
+    <script src="https://www.tpchannel.org/vendors/tempus-dominus/moment-with-locales.min.js"></script>
+    <script src="https://www.tpchannel.org/vendors/tempus-dominus/tempus-dominus.js"></script>
+
+        <script src="https://www.tpchannel.org/vendors/video-js/video.min.js"></script>
+    <script src="https://www.tpchannel.org/vendors/video-js/youtube.min.js"> </script>
+    <script src="https://www.tpchannel.org/vendors/video-js/videojs-contrib-quality-levels.min.js"> </script>
+    <script src="https://www.tpchannel.org/vendors/video-js/videojs-http-source-selector.min.js"> </script>
+    <script>
+        var url = 'https://tv-live.tpchannel.org/live/tv.m3u8';
+        var playerOptions = {
+            autoplay: false,
+            preload: 'auto',
+            controls: true,
+            responsive: true,
+            fluid: true,
+            liveui: true,
+            html5: {
+                vhs: {
+                    overrideNative: true
+                },
+                nativeAudioTracks: true,
+                nativeTextTracks: true,
+                nativeVideoTracks: true,
+                preloadTextTracks: true,
+            },
+            plugins: {
+                httpSourceSelector:
+                    {
+                        default: 'auto'
+                    }
+            }
+        }
+        var player = window.player = videojs('live-stream', playerOptions);
+        player.httpSourceSelector();
+
+        if(url.includes('m3u8')){
+            player.src({ type: 'application/x-mpegURL', src: url , withCredentials: false});
+        }
+        if(url.includes('youtube') || url.includes('youtu.be')){
+            player.options.techOrder = ['youtube'];
+            player.src({ type: 'video/youtube', src: url });
+        }
+        player.load();
+        player.play();
+    </script>
+
+    <script>
+        function setHeightFooter() {
+            let heightFooter = $('.site-footer').height();
+            $('html').css('padding-bottom', heightFooter);
+        }
+        $(document).ready(function() {
+            setHeightFooter();
+            $(window).resize(function() {
+                setHeightFooter();
+            });
+        });
+    </script>
+</body>
+
+</html>

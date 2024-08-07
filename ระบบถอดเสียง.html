@@ -1,0 +1,90 @@
+
+<!DOCTYPE html><html><head><title>โปรแกรมถอดเสียงอัตโนมัติเพื่อสนับสนุนการจัดทำรายงานการประชุม</title><meta name="description" content="โปรแกรมถอดเสียงอัตโนมัติเพื่อสนับสนุนการจัดทำรายงานการประชุม"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32"><meta name="viewport" content="width=device-width,initial-scale=1"></style></head><body data-smooth-scroll-offset="77">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNXLM7NS8J"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-NNXLM7NS8J');
+    </script>
+        
+    <div class="main-container"><section class="switchable switchable--switch bg--primary space--sm">
+      <div class="wait-section section-left"> </div>
+      <div class="row" id="dictation"> 
+        <div class="container"> 
+          <div class="notepad"> 
+            <P Align=center> 
+            
+            <font size="2"><a href="#" class="btn btn--sm btn-clear btn--primary"><span class="btn__text"> 
+              <select name="lang" id="lang" onChange="dictation('lang')">
+                <option value selected="selected" disabled="disabled">กรุณาเลือกภาษา</option>
+              </select>
+              </span></a> <a href="#" onClick="window.open('manual.pdf', '_blank', 'fullscreen=yes'); return false;" class="btn btn--sm btn-clear btn--primary"><span class="btn__text">คู่มือการใช้งาน</span></a> 
+              <a href="#" onClick="window.open('VoicemeeterBanana_Setup.exe', '_blank'); return false;" class="btn btn--sm btn-clear btn--primary"><span class="btn__text">โปรแกรมปรับเสียง</span></a> 
+              <a href="#" onClick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSevAKegEbENjCP6WW6f-bSNqF5RmtD7hKc2xoSdzdNR2r-_pA/viewform?vc=0&c=0&w=1&flr=0&fbclid=IwAR2huFMEc3UmFk-tGARleZzpcmY8N-jQhuE_XGEGwOGrP_LWPQPbytFsjdU', '_blank', 'fullscreen=yes'); return false;" class="btn btn--sm btn-clear btn--primary"><span class="btn__text">แบบสำรวจการใช้งาน</span></a></font> 
+            <div id="toolbar" class="hidden-xs">
+    <div class="scroll"> 
+            <div id="toolbar" class="hidden-xs">
+            <div id="speech"> <p class="log"><span></span>  </p> </div>      
+    </div>
+    </div>
+        
+             
+            </div>
+          </div>
+            <div id="toolbar" class="hidden-xs">
+            <P Align=center>
+            <a href="#" onclick="myFunction();return false;" class="btn btn--sm btn-clear btn--primary"><span class="btn__text">ล้างข้อความ</span></a> 
+    <script>
+    function myFunction() {
+            if (confirm("ล้างข้อความทั้งหมด") == true) {
+                dictation('clear');return false;
+               } else {
+               }
+               }
+    </script>
+            <a href="#" onclick="dictation('print');return false;" class="btn btn--sm btn-clear btn--primary"><span class="btn__text">พิมพ์</span></a> 
+            <a href="#" onclick="dictation('save');return false;" class="btn btn--sm btn-save btn--primary"><span class="btn__text">บันทึก</span></a> 	  
+            <a href="#" class="btn btn--sm btn--primary btn-clipboard"><span class="btn__text btn__copy">คัดลอก</span></a> 
+            <a href="#" class="btn-mic btn btn--primary-1"><span class="btn__text listen">เริ่ม</span></a> 
+            </P>   
+            </div>      
+          </div>
+        </div>
+       </div>
+      </div>
+    
+        
+      
+      
+    <div class="hidden">
+      <div class="modal-instance">
+        <div class="modal-container">
+          <div class="modal-content">
+            <div class="boxed boxed--lg">
+              <div class="row"><div class="col-xs-12 col-sm-4">
+                 <label></label>
+                 </div>
+                 <div class="col-xs-12 col-sm-4">
+                  <div class="input-number">
+                  <div class="input-number__controls"><span class="input-number__increase"><i class="stack-up-open"></i> 
+                  </span>
+                          
+                </div>
+                </div>
+                </div>          
+                </div>
+              <div class="modal-instance"><a class="btn modal-trigger nomic" href="#"><span class="btn__text">Allow 
+                Microphone</span></a></div>
+              <div class="row">
+                <div class="col-sm-12"></div>
+              </div></div></div></div></div></div><link rel="stylesheet" href="speech/css/meeting.css"><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,600,700" rel="stylesheet" type="text/css"><link href="quill/editor.css" rel="stylesheet"><script src="quill/library.js"></script><script src="speech/js/interface.js"></script></body></html>
+    <div class="page-count">
+        </div>
+             <span>ประมวลผล ...</span></a>
+             <span></span></a>	
+            <p class="log"><span></span></p>
+    

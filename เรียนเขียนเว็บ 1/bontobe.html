@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>demoมองการไกล</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+
+            <iframe src="index2.html" width="600" height="200"></iframe>
+            <br>
+            <iframe src="https://w3c.senate.go.th:1446/#" height="300" width="1000" allow="microphone"></iframe>
+        </p>
+    </form>
+
+    <script>
+        // สร้างฟังก์ชันสำหรับขออนุญาตใช้ไมโครโฟน
+        function requestMicrophoneAccess() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function (stream) {
+                    console.log('ได้รับอนุญาตให้ใช้ไมโครโฟนแล้ว');
+                })
+                .catch(function (error) {
+                    console.error('ไม่สามารถขออนุญาตใช้ไมโครโฟน: ' + error);
+                });
+        }
+    </script>
+</body>
+</html>

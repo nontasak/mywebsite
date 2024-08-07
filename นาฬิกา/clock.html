@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background-color: black;
+}
+
+#clock {
+  color: white;
+  font-size: 80px;
+  text-align: center;
+  margin-top: 200px;
+}
+</style>
+</head>
+<body onload="startTime()">
+
+<div id="clock"></div>
+
+<script>
+function startTime() {
+  var today = new Date();
+  var h = today.getHours();
+  var m = today.getMinutes();
+  var s = today.getSeconds();
+  m = checkTime(m);
+  s = checkTime(s);
+  document.getElementById('clock').innerHTML =
+  h + ":" + m + ":" + s;
+  var t = setTimeout(startTime, 500);
+}
+
+function checkTime(i) {
+  if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+  return i;
+}
+
+// Set alarm
+function setAlarm() {
+  var alarmTime = document.getElementById("alarmTime").value;
+  var alarm = new Date(alarmTime);
+  var currentTime = new Date();
+  var timeToAlarm = alarm - currentTime;
+
+  if (timeToAlarm > 0) {
+    setInterval(() => {
+      alert("Time's up!");
+    }, timeToAlarm);
+  } else {
+    alert("Invalid time. Please enter a time in the future.");
+  }
+}
+</script>
+
+<label for="alarmTime">Set alarm for:</label>
+<input type="datetime-local" id="alarmTime" name="alarmTime">
+<button onclick="setAlarm()">Set Alarm</button>
+
+</body>
+</html>

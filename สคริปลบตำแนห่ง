@@ -1,0 +1,105 @@
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('Smart Edit')
+    .addItem('ลบตำแหน่ง', 'removeNonNames')
+    .addToUi();
+}
+
+function removeNonNames() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var range = sheet.getRange("C3"); // กำหนดเซลล์ที่มีข้อความที่ต้องการตรวจสอบ
+  var text = range.getValue(); // ดึงข้อความจากเซลล์
+
+  var splitText = text.split("\n"); // แยกข้อความออกเป็นบรรทัดๆ
+
+  // รายการคำที่ต้องการตรวจสอบ
+  var keywords = ["นาย", "นาง", "ศาส", "รองศาส", "พล", "พัน", "ร้อย", "จ่า", "สิบ", "นา", "เรือ", "ดอก", "หม่อม", "ผู้ช่วยศาส", "เภ", "แพทย์","น.ส."];
+
+  var names = [];
+
+  // Loop ผ่านทุกบรรทัดของข้อความ
+  for (var i = 0; i < splitText.length; i++) {
+    var line = splitText[i];
+    var lastName = '';
+
+    // ตรวจสอบว่าบรรทัดนี้มีคำในรายการคำที่ต้องการตรวจสอบหรือไม่
+    var containsKeyword = false;
+    for (var j = 0; j < keywords.length; j++) {
+      if (line.includes(keywords[j])) {
+        containsKeyword = true;
+        break;
+      }
+    }
+
+    // ถ้ามีคำที่ต้องการ ให้เพิ่มข้อความลงในอาร์เรย์ชื่อ
+    if (containsKeyword) {
+      // ตรวจสอบว่ามีช่องว่างหน้าคำสุดท้ายหรือไม่
+      var lastIndex = line.lastIndexOf(' ');
+      if (lastIndex !== -1) {
+        lastName = line.substring(lastIndex + 1);
+      }
+      
+      // เชื่อมชื่อและนามสกุลเข้าด้วยกัน
+      var fullName = line.substring(0, lastIndex) + '  ' + lastName;
+      names.push(fullName);
+    }
+  }
+
+  // บันทึกการจัดรูปแบบปัจจุบันของเซลล์ G4
+  var cellFormat = {
+    background: range.getBackground(),
+    fontColor: range.getFontColor(),
+    fontFamily: range.getFontFamily(),
+    fontSize: range.getFontSize(),
+    fontWeight: range.getFontWeight(),
+    fontStyle: range.getFontStyle(),
+    horizontalAlignment: range.getHorizontalAlignment(),
+    verticalAlignment: range.getVerticalAlignment(),
+    numberFormat: range.getNumberFormat()
+  };
+
+  // ลบข้อความเดิมในเซลล์ G4 แต่คงการจัดรูปแบบไว้
+  range.clearContent();
+
+  // นำชื่อที่พบมาเขียนลงในแต่ละเซลล์เรียงลงมา
+  for (var k = 0; k < names.length; k++) {
+    var cell = sheet.getRange(range.getRow() + k, range.getColumn());
+    cell.setValue(names[k]);
+    
+    // คืนค่าการจัดรูปแบบเดิมให้แต่ละเซลล์
+    cell.setBackground(cellFormat.background);
+    cell.setFontColor(cellFormat.fontColor);
+    cell.setFontFamily(cellFormat.fontFamily);
+    cell.setFontSize(cellFormat.fontSize);
+    cell.setFontWeight(cellFormat.fontWeight);
+    cell.setFontStyle(cellFormat.fontStyle);
+    cell.setHorizontalAlignment(cellFormat.horizontalAlignment);
+    cell.setVerticalAlignment(cellFormat.verticalAlignment);
+    cell.setNumberFormat(cellFormat.numberFormat);
+  }
+  
+  // เรียกฟังก์ชันลบเอ็นเทอร์ท้ายบรรทัด
+  replaceNewlines();
+}
+
+function replaceNewlines() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var lastRow = sheet.getLastRow();
+  var range = sheet.getRange("C3:C" + lastRow); // เลือกช่วงข้อมูลในคอลัมน์ C เริ่มจาก C3
+  var values = range.getValues();
+
+  for (var i = 0; i < values.length; i++) {
+    var cellValue = values[i][0];
+    if (cellValue !== '') {
+      // แทนที่สัญลักษณ์หรืออักขระพิเศษท้ายข้อความด้วยช่องว่างและลบช่องว่างที่เกินด้านหลังข้อความ
+      cellValue = cellValue.replace(/[^\w\s]+$/, '').trim();
+      // แทนที่เอ็นเทอร์ดด้วยช่องว่างและลบช่องว่างที่เกิน
+      cellValue = cellValue.replace(/\n/g, ' ').trim();
+      values[i][0] = cellValue;
+    }
+  }
+
+  range.setValues(values); // อัพเดทค่ากลับลงในช่วงข้อมูล
+}
+
+

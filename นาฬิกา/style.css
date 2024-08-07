@@ -1,0 +1,24 @@
+body {
+    text-align: center;
+}
+
+.clock {
+    display: inline-block;
+    padding: 20px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.time {
+    font-size: 48px;
+}
+
+button {
+    background-color: #0074cc;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+}

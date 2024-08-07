@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition Web (Thai)</title>
+</head>
+<body>
+    <h1>Speech Recognition Web (Thai)</h1>
+    <button id="startButton">เริ่มการจดจำเสียง</button>
+    <button id="stopButton" disabled>หยุดการจดจำเสียง</button>
+    <div id="output"></div>
+    <textarea id="recognizedText" rows="5" cols="50" readonly></textarea>
+
+    <script>
+        let recognition = new window.webkitSpeechRecognition || new window.SpeechRecognition();
+
+        recognition.lang = 'th-TH';
+        recognition.continuous = true;
+
+        recognition.onstart = function() {
+            console.log('เริ่มการจดจำเสียง');
+        };
+
+        recognition.onresult = function(event) {
+            const result = event.results[event.results.length - 1];
+            const transcript = result[0].transcript;
+            document.getElementById('output').innerHTML = transcript;
+            document.getElementById('recognizedText').value = transcript;
+        };
+
+        document.getElementById('startButton').addEventListener('click', function() {
+            recognition.start();
+            document.getElementById('startButton').disabled = true;
+            document.getElementById('stopButton').disabled = false;
+        });
+
+        document.getElementById('stopButton').addEventListener('click', function() {
+            recognition.stop();
+            document.getElementById('startButton').disabled = false;
+            document.getElementById('stopButton').disabled = true;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    .inputtext {
+      width: 100%;
+      vertical-align: middle;
+      margin: 30px 10px 5px 0;
+      padding: 10px;
+      background-color: #ffffff;
+      border: 2px solid #000;
+      border-radius: 20px;
+      box-sizing: border-box;
+    }
+
+    .button {
+      width: 100%;
+      vertical-align: middle;
+      margin: 5px 10px 5px 0;
+      padding: 10px;
+      background-color: #8049FF;
+      border: 2px solid #000;
+      border-radius: 20px;
+      box-sizing: border-box;
+      text-transform: uppercase;
+      color: white;
+    }
+
+    div {
+      font-family: arial;
+      font-weight: bold;
+    }
+
+    #msg {
+      color: #000000;
+    }
+
+    body {
+      overflow-y: hidden;
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+<body>
+  <center>
+    <div class="div1">
+      <form name="myform" method="post">
+        <input type="text" name="uname" class="inputtext" autocomplete="off" placeholder="username">
+        <br>
+        <input type="password" name="pass" class="inputtext" autocomplete="off" placeholder="password">
+        <br>
+        <div id="msg"></div>
+        <br>
+        <input type="button" class="button" name="log" id="logbutton" value="Login" onclick="myfunction()">
+        <br><br>
+      </form>
+    </div>
+  </center>
+  <script type="text/javascript">
+    function myfunction() {
+      var user = document.forms["myform"]["uname"].value;
+      var pass = document.forms["myform"]["pass"].value;
+      if (user == "1" && pass == "1") { 
+        window.location.href = 'https://sites.google.com/view/shorthand-senate/%E0%B8%AB%E0%B8%99%E0%B8%B2%E0%B9%81%E0%B8%A3%E0%B8%81?authuser=0';
+      } else {
+        document.getElementById("msg").innerHTML = "ชื่อผู้ใช้ หรือรหัสผ่านไม่ถูกต้อง";
+      }
+    }
+  </script>
+</body>
+</html>

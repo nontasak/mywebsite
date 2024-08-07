@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>วิ่งเสียง + googledoc</title>
+    <meta charset="utf-8"/>
+    <style>
+        /* สร้าง CSS สำหรับปรับขนาด iframe */
+        .iframe-container {
+            display: flex;
+            gap: 10px; /* ระยะห่างระหว่าง iframe */
+        }
+
+        .iframe {
+            width: 100%; /* ความกว้างเต็มหน้าจอ */
+            height: 1000px; /* ความสูงตามที่คุณต้องการ */
+            max-width: 1000px; /* ปรับความกว้างสูงสุด */
+        }
+    </style>
+</head>
+<body>
+    <p>
+        <h1><label> โปรแกรมวิ่งเสียงและแปลงคำ </label></h1><br>
+
+        <!-- ใช้ container สำหรับ iframe และกำหนดคลาส -->
+        <div class="iframe-container">
+            <iframe src="https://w3c.senate.go.th:1446/#" class="iframe" allow="microphone"></iframe>
+            <iframe src="https://docs.google.com/document/d/1MLFFQiwuldPpzuivVI-9RxVkwdbCD3x0dhcogVEybS8/edit" class="iframe"></iframe>
+        </div>
+    </p>
+
+    </form>
+    <script>
+        // สร้างฟังก์ชันสำหรับขออนุญาตใช้ไมโครโฟน
+        // สร้างตัวแปรเพื่อตรวจสอบว่ามีอนุญาตใช้ไมโครโฟนแล้วหรือไม่
+let microphonePermissionGranted = false;
+
+// สร้างฟังก์ชันสำหรับขออนุญาตใช้ไมโครโฟน
+function requestMicrophoneAccess() {
+    if (!microphonePermissionGranted) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                console.log('ได้รับอนุญาตให้ใช้ไมโครโฟนแล้ว');
+                microphonePermissionGranted = true; // ตั้งค่าให้มีอนุญาตใช้ไมโครโฟนแล้ว
+            })
+            .catch(function (error) {
+                console.error('ไม่สามารถขออนุญาตใช้ไมโครโฟน: ' + error);
+            });
+    } else {
+        console.log('มีอนุญาตให้ใช้ไมโครโฟนอยู่แล้ว');
+    }
+}
+
+    </script>
+</body>
+</html>

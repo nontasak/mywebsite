@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <title>Conword</title>
+    <link rel="icon" href="./icon.png">
+    <div class="footer">
+      เวอร์ชัน 02.02.00  07/08/67 
+    </div>
+    <style>
+      body {
+          background-color: #b5bdc3;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          font-family: 'Tahoma', sans-serif;
+      }
+
+      #container {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 95vh;
+          margin: 0;
+          padding-top: 100px;
+    
+    
+      }
+
+      #textInput {
+          display: flex;
+          justify-content: center;
+          width: 95%;
+          max-width: 50em;
+          height: 95vh;
+          max-height: 60em;
+          padding: 35px;
+          font-size: 16px;
+          border-radius: 30px;
+          resize: none;
+          box-sizing: border-box;
+          background-color: #f8f8f8;
+          outline: none;
+          border: none;
+          box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+          margin-right: 1%;
+      }
+
+      .button-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 5px;
+          margin-top: 5px;
+          padding: none;
+          box-sizing: border-box;
+      }
+
+      .button-container button {
+          padding: 7.5px 10px;
+          font-size: 12px;
+          background-color: #2298e2;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          color: #ffffff;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: background-color 0.3s ease, transform 0.3s ease;
+          flex: 1;
+          min-width: 80px;
+          max-width: 120px;
+          font-family: 'Sukhumvit Set', sans-serif;
+      }
+
+      .button-container button:hover {
+          background-color: #148dd8;
+          transform: translateY(-2px);
+      }
+
+      .button-container button:active {
+          background-color: #1d638e;
+          transform: translateY(0);
+      }
+
+      .status-bar {
+          background-color: rgb(23, 182, 255);
+          color: #ffffff;
+          padding: 10px;
+          position: fixed;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 9999;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          border-radius: 5px;
+          font-family: Arial, sans-serif;
+          font-size: 14px;
+      }
+
+      .footer {
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          color: rgb(0, 0, 0);
+          padding: 10px;
+          font-size: 12px;
+      }
+
+      @media (max-width: 400px) {
+          #container {
+              width: 90%;
+          }
+
+          .button-container {
+              gap: 4px;
+          }
+
+          .button-container button {
+              padding: 10px 15px;
+              font-size: 14px;
+              min-width: 120px;
+              max-width: 150px;
+          }
+      }
+
+      @media (max-width: 300px) {
+          .button-container {
+              flex-direction: column;
+          }
+
+          .button-container button {
+              width: 100%;
+              padding: 8px 12px;
+              font-size: 10px;
+              min-width: unset;
+              max-width: unset;
+          }
+      }
+
+      /*css ของคลิปบอร์ด*/ 
+      #clipboard {
+          max-width: 100%;
+          width: 600px;
+          height: 95vh;
+          max-height:60em;
+          border: 1px solid #ccc;
+          padding: 10px;
+          padding-left: 15px;
+          border-radius: 20px;
+          box-sizing: border-box;
+          background-color: #f8f8f8;
+          outline: none;
+          border: none;
+          box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+          margin-right: 1%;
+          overflow-y: auto;
+          /*display: none;*/
+      }
+
+      #clipboard-heading {
+          font-family: 'Arial', sans-serif;
+          font-size: 20px;
+          color: #0b3955;
+          padding: 6px 25px;
+          background-color: #f8f8f8;
+          position: sticky;
+          top: 0;
+          z-index: 1;
+          height: 20px;
+      }
+
+      .action-btn {
+          top: 64px;
+          z-index: 1;
+          background-color: #2298e2;
+          color: white;
+          padding: 5px 10px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 0.7em;
+          margin-left: 6px;
+          z-index: 2;
+      }
+
+      .action-btn:hover {
+          background-color: #148dd8;
+      }
+
+      .action-btn:active {
+          background-color: #1d638e;
+      }
+
+      @media only screen and (max-width: 600px) {
+          #clipboard {
+              width: 100%;
+              height: 100%;
+          }
+      }
+
+      @media only screen and (max-width: 400px) {
+          #clipboard {
+              width: 95%;
+              height: 95%;
+          }
+      }
+
+      h2, h3 {
+          margin-top: 0;
+      }
+
+      ul {
+          list-style-type: none;
+          padding: 0;
+      }
+
+      li {
+          width: 92%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          border: 1px solid #d3dcff6c;
+          padding: 10px;
+          margin-bottom: 5px;
+          border-radius: 5px;
+          background-color: #d3dcff6c;
+      }
+
+      li span {
+          cursor: pointer;
+      }
+
+      button {
+          margin-left: 1%;
+      }
+
+      button.edit, button.delete {
+          border: none;
+          background: none;
+          cursor: pointer;
+          font-size: 1em;
+      }
+
+      .delete {
+          float: right;
+          font-size: 50%;
+          color: rgba(57, 57, 57, 0.765);
+      }
+
+      .edit {
+          float: right;
+          color: rgba(57, 57, 57, 0.765);
+      }
+
+      button.edit, button.delete {
+          border: none;
+          background: none;
+          cursor: pointer;
+          font-size: 1em;
+      }
+
+#clock {
+    position: fixed;
+    top: 10px; /* ปรับให้ห่างจากด้านบน */
+    right: 10px; /* ปรับให้ห่างจากด้านขวา */
+    background-color: rgba(0, 0, 0, 0.6); /* พื้นหลังสีดำโปร่งแสง */
+    color: #ffffff; /* สีตัวอักษร */
+    padding: 10px 15px; /* การจัดระยะห่างด้านใน */
+    border-radius: 5px; /* มุมมน */
+    font-family: 'Tahoma', sans-serif; /* แบบอักษร */
+    font-size: 16px; /* ขนาดอักษร */
+    z-index: 1000; /* อยู่ด้านบนสุด */
+    transition: all 0.3s ease; /* เพิ่มการเปลี่ยนแปลงนุ่มนวล */
+}
+
+@media (max-width: 900px) {
+    #clock {
+        font-size: 14px; /* ลดขนาดอักษร */
+        padding: 8px 12px; /* ลดการจัดระยะห่างด้านใน */
+    }
+}
+
+@media (max-width: 600px) {
+    #clock {
+        font-size: 12px; /* ลดขนาดอักษร */
+        padding: 5px 10px; /* ลดการจัดระยะห่างด้านใน */
+    }
+}
+
+@media (max-width: 400px) {
+    #clock {
+        font-size: 10px; /* ลดขนาดอักษร */
+        padding: 3px 8px; /* ลดการจัดระยะห่างด้านใน */
+    }
+}
+
+@media (max-height: 600px) {
+    #clock {
+        font-size: 12px; /* ลดขนาดอักษร */
+        padding: 5px 10px; /* ลดการจัดระยะห่างด้านใน */
+    }
+}
+
+@media (max-height: 400px) {
+    #clock {
+        font-size: 10px; /* ลดขนาดอักษร */
+        padding: 3px 8px; /* ลดการจัดระยะห่างด้านใน */
+    }
+}
+
+
+  </style>
+  
+<link rel="icon" href="./icon.png">
+</head>
+<body>
+  <div id="clock"></div>
+  <div id="container">
+      <textarea id="textInput" rows="10" cols="50"></textarea><br>
+      <div class="button-container">
+          <button onclick="arabicNumberToThaiNumberAndReplace(); processPlusSigns();">แปลงคำ</button>
+          <button onclick="findAndAlertErrors()">ตรวจคำผิด</button>
+          <button onclick="copyText()">คัดลอก</button>
+          <button onclick="confirmClearText()">ล้างข้อความ</button>
+          <button class="action-btn" id="toggleClipboard" onclick="toggleClipboard()">
+              <i id="clipboardIcon" class="fas fa-chevron-up"></i>
+              <span id="clipboardButtonText">clipboard</span>
+          </button>
+      </div>
+      <p id="output"></p>
+  </div>
+
+  <!-- ส่วนของ pastboard -->
+  <div id="clipboard">
+      <h3 id="clipboard-heading">Clipboard</h3>
+      <button class="action-btn" onclick="addItem()"><i class="fas fa-plus"></i></button>
+      <button class="action-btn" onclick="clearAll()">ล้างรายการ</button>
+      <ul id="clipList">
+          <!-- List items will be added dynamically -->
+      </ul>
+  </div>
+
+  <script>
+      var clipboard = document.getElementById("clipboard");
+
+      function toggleClipboard() {
+      var clipboard = document.getElementById("clipboard");
+      var icon = document.getElementById("clipboardIcon");
+      if (clipboard.classList.contains("open")) {
+          clipboard.classList.remove("open");
+          setTimeout(function() {
+              clipboard.style.display = "none";
+          }, 100);
+          icon.className = "fas fa-chevron-down";
+      } else {
+          clipboard.style.display = "block";
+          setTimeout(function() {
+              clipboard.classList.add("open");
+          }, 10);
+          icon.className = "fas fa-chevron-up";
+      }
+  }
+// ฟังก์ชันเพื่อบันทึกรายการ clipList ลงใน localStorage
+function saveClipListToLocalStorage() {
+    var clipList = document.getElementById('clipList');
+    var items = [];
+    for (var i = 0; i < clipList.children.length; i++) {
+        items.push(clipList.children[i].querySelector('span').textContent);
+    }
+    localStorage.setItem('clipList', JSON.stringify(items));
+}
+
+// ฟังก์ชันเพื่อโหลดรายการ clipList จาก localStorage
+function loadClipListFromLocalStorage() {
+    var items = JSON.parse(localStorage.getItem('clipList'));
+    if (items) {
+        var clipList = document.getElementById('clipList');
+        clipList.innerHTML = ''; // ล้างรายการเก่าก่อน
+        items.forEach(function(item) {
+            var li = document.createElement('li');
+            var span = document.createElement('span');
+            span.textContent = item;
+
+            span.onclick = function() {
+                copyToEditor(span);
+            };
+
+            li.appendChild(span);
+
+            var deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.className = 'delete';
+            deleteBtn.onclick = function() {
+                clipList.removeChild(li);
+                saveClipListToLocalStorage(); // บันทึกเมื่อมีการลบ
+            };
+
+            li.appendChild(deleteBtn);
+
+            var editBtn = document.createElement('button');
+            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            editBtn.className = 'edit';
+            editBtn.onclick = function() {
+                var currentListItem = li;
+                var currentListItemText = span.textContent;
+
+                var textEditor = document.createElement('textarea');
+                textEditor.value = currentListItemText;
+                textEditor.style.width = '99%';
+                textEditor.style.height = '30px';
+
+                li.replaceChild(textEditor, span);
+                textEditor.focus();
+
+                textEditor.onblur = function() {
+                    span.textContent = textEditor.value;
+                    li.replaceChild(span, textEditor);
+                    editBtn.style.display = 'inline';
+                    deleteBtn.style.display = 'inline';
+                    saveClipListToLocalStorage(); // บันทึกเมื่อมีการแก้ไข
+                };
+
+                editBtn.style.display = 'none';
+                deleteBtn.style.display = 'none';
+            };
+
+            li.appendChild(editBtn);
+
+            clipList.appendChild(li);
+        });
+    }
+}
+
+// ฟังก์ชัน addItem ที่อัพเดท
+function addItem() {
+    var items = prompt('ใส่ข้อความที่คุณต้องการ');
+    if (items !== null && items.trim() !== '') {
+        var clipList = document.getElementById('clipList');
+        items.split(/\r?\n|\r/).forEach(function(item) {
+            if (item.trim() !== '') {
+                var li = document.createElement('li');
+                var span = document.createElement('span');
+                span.textContent = item.trim();
+
+                span.onclick = function() {
+                    copyToEditor(span);
+                };
+
+                li.appendChild(span);
+
+                var deleteBtn = document.createElement('button');
+                deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                deleteBtn.className = 'delete';
+                deleteBtn.onclick = function() {
+                    clipList.removeChild(li);
+                    saveClipListToLocalStorage(); // บันทึกเมื่อมีการลบ
+                };
+
+                li.appendChild(deleteBtn);
+
+                var editBtn = document.createElement('button');
+                editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                editBtn.className = 'edit';
+                editBtn.onclick = function() {
+                    var currentListItem = li;
+                    var currentListItemText = span.textContent;
+
+                    var textEditor = document.createElement('textarea');
+                    textEditor.value = currentListItemText;
+                    textEditor.style.width = '99%';
+                    textEditor.style.height = '30px';
+
+                    li.replaceChild(textEditor, span);
+                    textEditor.focus();
+
+                    textEditor.onblur = function() {
+                        span.textContent = textEditor.value;
+                        li.replaceChild(span, textEditor);
+                        editBtn.style.display = 'inline';
+                        deleteBtn.style.display = 'inline';
+                        saveClipListToLocalStorage(); // บันทึกเมื่อมีการแก้ไข
+                    };
+
+                    editBtn.style.display = 'none';
+                    deleteBtn.style.display = 'none';
+                };
+
+                li.appendChild(editBtn);
+
+                clipList.appendChild(li);
+            }
+        });
+        saveClipListToLocalStorage(); // บันทึกเมื่อมีการเพิ่ม
+    }
+}
+
+// โหลดรายการ clipList เมื่อโหลดหน้า
+window.onload = function() {
+    var savedText = localStorage.getItem('savedText');
+    if (savedText !== null) {
+        document.getElementById('textInput').value = savedText;
+    }
+    loadClipListFromLocalStorage(); // โหลดรายการ clipList
+};
+      function copyToEditor(item) {
+    var textEditor = document.getElementById("textInput");
+    var itemText = item.textContent.trim();
+
+    // เพิ่มการขึ้นบรรทัดใหม่และย่อหน้าก่อนที่จะเพิ่มข้อความ
+    var newItemText = "\n\t\t" + itemText;
+
+    if (itemText.endsWith(":")) {
+        newItemText += "   ";
+    }
+
+    var selectionStart = textEditor.selectionStart;
+    var selectionEnd = textEditor.selectionEnd;
+    var text = textEditor.value;
+    var newText = text.substring(0, selectionStart) + newItemText + text.substring(selectionEnd, text.length);
+    textEditor.value = newText;
+
+    // บันทึกข้อความที่ถูกเพิ่มใหม่ลงใน localStorage
+    saveToLocalStorage(textEditor.value);
+    textEditor.focus();
+    }
+
+      function clearAll() {
+          var clipList = document.getElementById("clipList");
+          clipList.innerHTML = "";
+      }
+
+
+        var textEditor = document.getElementById("textInput");
+        var currentTextareaContent = textEditor.value;
+        textEditor.addEventListener('keyup', function() {
+            currentTextareaContent = textEditor.value;
+            localStorage.setItem('textareaContent', currentTextareaContent);
+        });
+        
+        //เพิ่มฟังชั่นเพื่อ tab
+        var textEditor = document.getElementById("textInput");
+        textEditor.addEventListener('keydown', function(event) {
+        if (event.key === 'Tab') {
+        event.preventDefault(); // ป้องกัน Tab ใช้งานโดยปกติ
+        
+        var start = this.selectionStart;
+        var end = this.selectionEnd;
+
+        // เพิ่มการเยื้องด้วย Tab
+        var text = this.value;
+        var newText = text.substring(0, start) + '\t' + text.substring(end);
+        this.value = newText;
+
+        // ตั้งค่าตำแหน่ง cursor ให้เลื่อนไปหลังจุดที่เพิ่งเพิ่ม Tab เข้าไป
+        this.selectionStart = this.selectionEnd = start + 1;
+    }
+});
+
+
+
+
+    function arabicNumberToThaiNumberAndReplace() {
+      var text = document.getElementById("textInput").value;
+      text = performAdditionalReplacements(text);
+      
+      var arabicNumber = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      var thaiNumber = ['๐', '๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙'];
+
+    //แก้ไขปีย่อเป็นปีเต็ม
+    text = text.replace(/(มกราคม|กุมภาพันธ์|มีนาคม|เมษายน|พฤษภาคม|มิถุนายน|กรกฎาคม|สิงหาคม|กันยายน|ตุลาคม|พฤศจิกายน|ธันวาคม) (\d{2})(?=\D|$)/g, '$1 ๒๕$2');
+    text = text.replace(/ปี (\d{2})(?=\D|$)/g, 'ปี ๒๕$1');
+
+    // เปลี่ยนเวลาที่มีรูปแบบ xx:xx น เป็น xx.xx นาฬิกา
+    text = text.replace(/(\d{2}):(\d{2}) น/g, "$1.$2 นาฬิกา");
+
+      // ลบคำที่พิมพ์ซ้ำ
+    text = text.replace(/นำ(นำ)+/g, 'นำ');
+    text = text.replace(/เรื่อง(เรื่อง)+/g, 'เรื่อง');
+    text = text.replace(/ทำ(ทำ)+/g, 'ทำ');
+    text = text.replace(/ว่า(ว่า)+/g, 'ว่า');
+    text = text.replace(/คือ(คือ)+/g, 'คือ');
+    text = text.replace(/ซึ่ง(ซึ่ง)+/g, 'ซึ่ง');
+    text = text.replace(/ท่าน(ท่าน)+/g, 'ท่าน');
+    text = text.replace(/มี(มี)+/g, 'มี');
+    text = text.replace(/ได้(ได้)+/g, 'ได้');
+    text = text.replace(/ไม่(ไม่)+/g, 'ไม่');
+    text = text.replace(/ผม(ผม)+/g, 'ผม');
+    text = text.replace(/อันนี้(อันนี้)+/g, 'อันนี้');
+    text = text.replace(/ไป(ไป)+/g, 'ไป');
+    text = text.replace(/นุการ(นุการ)+/g, 'นุการ');
+    text = text.replace(/เป็น(เป็น)+/g, 'เป็น');
+    text = text.replace(/ของ(ของ)+/g, 'ของ');
+    text = text.replace(/ไม่ได้(ไม่ได้)+/g, 'ไม่ได้');
+    text = text.replace(/ๆ(ๆ)+/g, 'ๆ');
+    text = text.replace(/\.\s\.\s\.\s/g, '. ');
+    text = text.replace(/หน้าที่\s+(\d+)/g, 'หน้า $1');
+    
+  
+  
+    
+    // แปลงตัวเลขอารบิกเป็นตัวเลขไทย
+    for (var i = 0; i < text.length; i++) {
+        var char = text.charAt(i);
+        var index = arabicNumber.indexOf(char);
+        if (index !== -1) {
+            text = text.replace(char, thaiNumber[index]);
+        }
+    }
+    
+    // แก้คำผิดและลบคำตามเงื่อนไขที่กำหนด
+    var replacements = [
+    { pattern: /สภาผู้แทน(?!ราษฎร)/g, newText: "สภาผู้แทนราษฎร" },    
+    { pattern: /ทูลเกล้า(?!ฯ)/g, newText: "ทูลเกล้าฯ" },
+    { pattern: /กระทรวงเกษตร(?!และสหกรณ์)/g, newText: "กระทรวงเกษตรและสหกรณ์" },
+    { pattern: /เพราะฉะนั้น(?! )/g, newText: "เพราะฉะนั้น " },
+    { pattern: /ล้านล้าน(?!บาท)/g, newText: "ล้านล้านบาท" },
+    { pattern: /สหรัฐ(?!อเมริกา)/g, newText: "สหรัฐอเมริกา" },
+    { pattern: /มัธยม(?!ศึกษา)/g, newText: "มัธยมศึกษา" },
+    { pattern: /พฤหัส(?!บดี)/g, newText: "พฤหัสบดี" },
+    { pattern: /จังหวัดสกล(?!นคร)/g, newText: "สกลนคร" },
+    { pattern: /จังหวัดอุบล(?!ราชธานี)/g, newText: "อุบลราชธานี" },
+   
+
+    { pattern: /(?<!น้ำ|อันดา|ไข|เยอร)มัน(?!ฝรั่ง|สำปะหลัง|เทศ|แกว)/g, newText: "" },
+    { pattern: /ก็(?!บ|ต|ง|จ|ด)/g, newText: "" },
+    { pattern: /เ\*+วชาญ/g, newText: "เชี่ยวชาญ" },
+    { pattern: /แ\*+าน/g, newText: "แม่งาน" },
+
+    //ถ้า (... ไม่ตามด้วย ... จะแก้) |หาคำนี้|หาคำนี้| ถ้าเจอจะแก้
+    { pattern: /กรุงเทพ(?!มหานคร)|กรุงเทพฯ|กรุงเทพมหานครฯ/g, newText: "กรุงเทพมหานคร" },
+
+    // เติมช่องว่าง
+    { pattern: /-(?! )/g, newText: " - " },
+    { pattern: /ๆ(?! )/g, newText: " ๆ " },
+    { pattern: /อปท.(?! )/g, newText: " อปท. " },
+
+    // ถ้า....ไม่มี(?!...ต่อท้าย จะแก้ข้อความ แต่ถ้ามี ...|... ) จะไม่แก้ข้อความ *********
+    { pattern: /ล้าน(?!บาท|ค|ล|ต|ไ)/g, newText: "ล้านบาท" },  
+
+    //ถ้า     ไม่มี ห นำหน้า กรรมการ ไม่มี การอาชีวศึกษา.....ต่อท้าย จะแก้กรรมการเป็น กรรมาธิการ **ถ้าจะเพิ่่มคำข้างหน้าให้ใส่ | ได้ **
+    //*******************************************************************
+    //***************************กรรมการ*********************************
+    { pattern: /(?<!ห|จ)กรรมการ(?!ก|ป| |ต|ส|ร|น|ด|พ|บ|ม|ค|จ|องค์กรอิสระ)/g, newText: "กรรมาธิการ" },
+    //*******************************************************************
+    { pattern: /เลขา(?!นุการ|ธิการ)/g, newText: "เลขานุการ" },
+    { pattern: /(?<!หม่อน)ไหม(?!ทอง|พรม|้)/g, newText: "หรือไม่" },
+    //{ pattern: /(?<!ป)นายก(?!รัฐมนตรี|อ|เ| |ส|ค|ศ|ิ)/g, newText: "นายกรัฐมนตรี" },
+
+
+    //เติมจุด***********************************************
+    { pattern: /สตง(?!\.)/g, newText: " สตง. " },
+    { pattern: /(\b)พ\.ร\.บ(?!\.)/g, newText: "$1พ.ร.บ. " },
+    { pattern: /กกต(?!\.|ิกา)/g, newText: " กกต." },
+    { pattern: /อปท(?!\.)/g, newText: " อปท. " },
+    { pattern: /คสช(?!\.)/g, newText: " คสช. " },
+    { pattern: /กสทช(?!\.)/g, newText: " กสทช. " },
+    { pattern: /กศน(?!\.)/g, newText: " กศน. " },
+    { pattern: /ครม(?!\.|ี|า)/g, newText: " ครม. " },
+    { pattern: /ค.ร.ม(?!\.|ี|า)/g, newText: " ครม. " },
+    { pattern: /พรบ(?!\.)/g, newText: " พ.ร.บ. " },
+    { pattern: /ปปง(?!\.)/g, newText: " ปปง. " },
+    { pattern: /ปปช(?!\.)/g, newText: " ป.ป.ช. " },
+    { pattern: /ป.ป.ช(?!\.)/g, newText: " ป.ป.ช. " },
+    { pattern: /ปปท(?!\.)/g, newText: " ป.ป.ท. " },
+    { pattern: /สวทช(?!\.)/g, newText: " สวทช. " },
+
+    //ลบช่องว่างที่มากกว่า 1 เคาะ จะต้องอยู่ล่างสุดเสมอ ****************
+    { pattern: /(?:\r\n?|\n){2,}/g, newText: "\n" },
+
+
+    ];
+
+    replacements.forEach(function(replacement) {
+        text = text.replace(replacement.pattern, replacement.newText);
+    });
+    
+    document.getElementById("textInput").value = text;
+}
+function processPlusSigns() {
+  var textArea = document.getElementById("textInput");
+  var text = textArea.value;
+
+  // หาคำที่มีเครื่องหมาย "+"
+  var newText = text.replace(/\+/g, "\n\t\t");
+
+  // ลบเคาะบรรทัดใหม่เมื่อมีบรรทัดว่างหลายบรรทัดซ้อนๆ กัน
+  newText = newText.replace(/(?:\r\n?|\n){2,}/g, "\n");
+
+  // นำข้อความที่แก้ไขแล้วใส่กลับใน text area
+  textArea.value = newText;
+}
+
+
+function performAdditionalReplacements(text) {
+    text = text.replace(/ฮะ/g, "");
+    text = text.replace(/นะครับ/g, "");
+    text = text.replace(/เนาะ/g, "");
+    text = text.replace(/มั้ย/g, "");
+    text = text.replace(/ครับ/g, "");
+    text = text.replace(/นะคะ/g, "");
+    text = text.replace(/ค่ะ/g, "");
+    text = text.replace(/เนี่ย/g, "");
+    text = text.replace(/เนี้ย/g, "");
+    text = text.replace(/ไอ้/g, "");
+    text = text.replace(/น่ะ/g, "");
+    text = text.replace(/อ่ะ/g, "");
+    text = text.replace(/เนี่ย/g, "");
+    text = text.replace(/เงี้ย/g, "");
+    text = text.replace(/นะฮะ/g, "");
+    text = text.replace(/ฮ่า/g, "");
+    text = text.replace(/แว๊บ ๆ /g, "");
+    text = text.replace(/เอ้ย/g, "");
+    text = text.replace(/โอ้โห/g, "");
+    text = text.replace(/เนี่ย/g, "");
+    text = text.replace(/เอ้า/g, "");
+    text = text.replace(/เออ/g, "");
+    text = text.replace(/นี่แหละ/g, "");
+    text = text.replace(/อยู่นะ/g, "");
+    text = text.replace(/ตามนั้น/g, "");
+    text = text.replace(/ก็แล้วแต่/g, "");
+    text = text.replace(/นู้น/g, "");
+    text = text.replace(/นี่ก็/g, "");
+    text = text.replace(/อะไรนะ/g, "");
+    text = text.replace(/นั่นแหละ/g, "");
+    text = text.replace(/เอ้ย/g, "");
+    text = text.replace(/เอ่อ/g, "");
+    text = text.replace(/ตัวของ/g, "");
+    text = text.replace(/ที่ด่าน/g, "");
+    text = text.replace(/ นั้น/g, "");
+    text = text.replace(/ป๋า/g, "");
+    text = text.replace(/นี้จะ/g, "");
+    text = text.replace(/ก็เลย/g, "");
+    text = text.replace(/ขอสไลด์ต่อไป/g, "");
+    text = text.replace(/สไลด์ต่อไป/g, "");
+    text = text.replace(/ปุ๊บ/g, "");
+    text = text.replace(/แหละ/g, "");
+    text = text.replace(/ป่ะ/g, "");
+    text = text.replace(/มั้ง/g, "");
+    text = text.replace(/ใช่ป่ะ/g, "");
+    text = text.replace(/ด้วยป่ะ/g, "");
+    text = text.replace(/อะไรอย่างงี้/g, "");
+    text = text.replace(/อะไรอย่างนี้/g, "");
+    text = text.replace(/อินดี้/g, "");
+    text = text.replace(/อ่าก็/g, "");
+    text = text.replace(/นาฬิกาะ/g, "");
+    text = text.replace(/แล้วกัน/g, "");
+    text = text.replace(/ป๋อง/g, "");
+    text = text.replace(/เอาไง/g, "");
+    
+
+    
+    //แก้คำให้ถูกต้อง ******************************************
+    text = text.replace(/กดระเบียบ/g, "กฎระเบียบ");
+    text = text.replace(/ท่านประทาน/g, "ท่านประธาน");
+    text = text.replace(/โควต้า/g, "โควตา");
+    text = text.replace(/อาทิตย์หน้า/g, "สัปดาห์หน้า");
+    text = text.replace(/อาทิตย์ต่อ/g, "สัปดาห์ต่อ");
+    text = text.replace(/อายุอเมริกา/g, "อนุกรรมาธิการ");
+    text = text.replace(/มนุษย์ชน/g, "มนุษยชน");
+    text = text.replace(/ค่อนข้างเยอะ/g, "ค่อนข้างมาก");
+    text = text.replace(/รถค่า/g, "ลดค่า");
+    text = text.replace(/แจ้งจากที่/g, "แจ้งต่อที่");
+    text = text.replace(/ระเบียบเวลา/g, "ระเบียบวาระ");
+    text = text.replace(/เชิงมา/g, "เชิญมา");
+    text = text.replace(/ประกันที่/g, "ประการที่");
+    text = text.replace(/เครือขาด/g, "เครือข่าย");
+    text = text.replace(/สำนักงานประมาณ/g, "สำนักงบประมาณ");
+    text = text.replace(/ต่อสนอง/g, "ตอบสนอง");
+    text = text.replace(/พี่นา/g, "พิจารณา");
+    text = text.replace(/รูปประธรรม/g, "รูปธรรม");
+    text = text.replace(/ทั้งสองฝ่าย/g, "ทั้ง ๒ ฝ่าย");
+    text = text.replace(/นึง/g, "หนึ่ง");
+    text = text.replace(/งั้น/g, "อย่างนั้น");
+    text = text.replace(/ไหร่/g, "ไร");
+    text = text.replace(/เมื่อกี้/g, "เมื่อสักครู่นี้");
+    text = text.replace(/คุรุภัณฑ์/g, "ครุภัณฑ์");
+    text = text.replace(/ยังไง/g, "อย่างไร");
+    text = text.replace(/มหาลัย/g, "มหาวิทยาลัย");
+    text = text.replace(/%/g, "เปอร์เซ็นต์");
+    text = text.replace(/นาฬิกาาที/g, "นาที");
+    text = text.replace(/หรือเปล่า/g, "หรือไม่");
+    text = text.replace(/นครประถม/g, "นครปฐม");
+    text = text.replace(/ณวันที่/g, " ณ วันที่");
+    text = text.replace(/ณขณะนี้/g, " ณ ขณะนี้");
+    text = text.replace(/ณปัจจุบัน/g, " ณ ปัจจุบัน");
+    text = text.replace(/ณวันนี้/g, " ณ วันนี้");
+    text = text.replace(/โอเค/g, " โอเค ");
+    text = text.replace(/LINE/g, "ไลน์");
+    text = text.replace(/อนุกรรมการ/g, "อนุกรรมาธิการ");
+    text = text.replace(/ในเรื่องของ/g, "ในเรื่อง");
+    text = text.replace(/เดินทีเดียว/g, "เดิมทีเดียว");
+    text = text.replace(/นั่นหมายความว่า/g, "หมายความว่า");
+    text = text.replace(/ไว้นะ/g, "ไว้");
+    text = text.replace(/หม่อนหรือไม่/g, "หม่อนไหม");
+    text = text.replace(/อะไรอย่างไร/g, "อย่างไร");
+    text = text.replace(/ก็น่าจะ/g, "น่าจะ");
+    text = text.replace(/แบงค์/g, "ธนาคาร");
+    text = text.replace(/แบงค์ชาติ/g, "ธนาคารแห่งประเทศไทย");
+    text = text.replace(/ธนาคารชาติ/g, "ธนาคารแห่งประเทศไทย");
+    text = text.replace(/ดิจิตอล/g, "ดิจิทัล");
+    text = text.replace(/สรุปก็คือว่า/g, "สรุปว่า");
+    text = text.replace(/ประมาณสัก/g, "ประมาณ");
+    text = text.replace(/เท่านั้นเท่านี้/g, "เท่านี้");
+    text = text.replace(/นั้นเป็น/g, "เป็น");
+    text = text.replace(/2560 6/g, "2566");
+    text = text.replace(/ก็ประมาณ/g, "ประมาณ");
+    text = text.replace(/เรื่องของ/g, "เรื่อง");
+    text = text.replace(/ที่ทาง/g, "ที่");
+    text = text.replace(/เพื่อที่จะ/g, "เพื่อ");
+    text = text.replace(/กับทาง/g, "กับ");
+    text = text.replace(/ให้ทาง/g, "ให้");
+    text = text.replace(/ดูซิ/g, "ดู");
+    text = text.replace(/และทาง/g, "และ");
+    text = text.replace(/ทางที่ประชุม/g, "ที่ประชุม");
+    text = text.replace(/รถจาก/g, "ลดจาก");
+    text = text.replace(/นัยยะสำคัญ/g, "นัยสำคัญ");
+    text = text.replace(/ประชุมวิทย์/g, "ประชุมวิป");
+    text = text.replace(/เดี๋ยวต้อง/g, "ต้อง");
+    text = text.replace(/ทางผู้แทน/g, "ผู้แทน");
+    text = text.replace(/ผมว่า/g, "ผมคิดว่า");
+    text = text.replace(/ไม่จะเป็น/g, "ไม่ว่าจะเป็น");
+    text = text.replace(/เลยทำให้/g, "จึงทำให้");
+    text = text.replace(/คำหนึ่ง/g, "คำนึง");
+    text = text.replace(/เค้า/g, "เขา");
+    text = text.replace(/เพราะอย่างนั้น/g, "เพราะฉะนั้น");
+    text = text.replace(/หน่อย/g, "");
+    text = text.replace(/ลายน้ำอนุ/g, "รายนามอนุ");
+    text = text.replace(/ลายน้ำกรรม/g, "รายนามกรรม");
+    text = text.replace(/ผู้รายการประชุม /g, "ผู้ลาการประชุม");
+    text = text.replace(/สาสุข/g, "สาธารณสุข");
+    text = text.replace(/หน้าจะ/g, "น่าจะ");
+    text = text.replace(/นวัตกรรมาธิการ/g, "นวัตกรรมการ");
+    text = text.replace(/ระบบขนส่งมวลชนกรุงเทพมหานคร/g, "ระบบขนส่งมวลชนกรุงเทพ");
+    text = text.replace(/คนแก่/g, "ผู้สูงอายุ");
+    text = text.replace(/เยอะขึ้น/g, "มากขึ้น");
+    text = text.replace(/ร่วงเลย/g, "ล่วงเลย");
+    text = text.replace(/อย่างงี้/g, "อย่างนี้");
+    text = text.replace(/คิดนะ/g, "คิด");
+    text = text.replace(/ออนไซด์/g, "ออนไซต์");
+    text = text.replace(/ดีเลย/g, "ดี");
+    text = text.replace(/นาฬิกาาที/g, "นาที");
+    text = text.replace(/พละศึกษา/g, "พลศึกษา");
+    text = text.replace(/และใช้ได้ดีเลย/g, "แล้วใช้ได้ดี");
+    text = text.replace(/สวัสดีถ้าเราไม่ขัดข้อง/g, "วันนี้ถ้าเราไม่ขัดข้อง");
+    text = text.replace(/เมื่อสักครู่นี้นะ/g, "เมื่อสักครู่นี้");
+    text = text.replace(/อยากสัปดาห์วันพุธพรุ่งนี้/g, "วันพรุ่งนี้");
+    text = text.replace(/คณะกรรมาธิการคณะใหญ่เขา/g, "คณะกรรมาธิการคณะใหญ่");
+    text = text.replace(/แล้วนะ/g, "แล้ว");
+    text = text.replace(/แจ้งมาเพิ่มเติมมา/g, "แจ้งเพิ่มเติมมา");
+    text = text.replace(/ผมเชื่อเป็น/g, "ผมเชื่อว่าเป็น");
+    text = text.replace(/อยากให้ถ้าเรา/g, "ถ้าเรา");
+    text = text.replace(/อยากจะให้/g, "อยากให้");
+    text = text.replace(/อย่างนั้นผมขอ/g, "ผมขอ");
+    text = text.replace(/จะคณะเรา/g, "จากคณะเรา");
+    text = text.replace(/ตามที่ตามที่/g, "ตามที่");
+    text = text.replace(/ระเบียบวาระที่ ๒ รับรองผู้จัดการประชุม/g, "ระเบียบวาระที่ ๒ รับรองบันทึกการประชุม");
+    text = text.replace(/ฝ่ายเลขานุการเขา/g, "ฝ่ายเลขานุการ");
+    text = text.replace(/หน้าด้านอนุ/g, "หน้าแรกอนุ");
+    text = text.replace(/กรรมการอาชีวศึกษา /g, "กรรมการการอาชีวศึกษา ");
+    text = text.replace(/เพิ่มเติมอะไรหรือไม่/g, "เพิ่มเติมหรือไม่");
+    text = text.replace(/เป้าหมายณสิ้น/g, "เป้าหมาย ณ สิ้น");
+    text = text.replace(/ต้องมีเสนอ/g, "ต้องเสนอ");
+    text = text.replace(/การที่เกิด/g, "การเกิด");
+    text = text.replace(/กระทรวงท่องเที่ยวและกีฬา/g, "กระทรวงการท่องเที่ยวและกีฬา");
+    text = text.replace(/แม่สอดคล้อง/g, "ไม่สอดคล้อง");
+    text = text.replace(/ปัญหาลูกประสาท/g, "ปัญหาและอุปสรรค");
+    text = text.replace(/ข้อเขียนเพิ่มเติม/g, "ข้อคิดเห็นเพิ่มเติม");
+    text = text.replace(/เกี่ยวการ/g, "เกี่ยวกับการ");
+    text = text.replace(/e-bidding/g, "e-Bidding");
+    text = text.replace(/blockchain/g, "Blockchain");
+    text = text.replace(/ล็อค/g, "ล็อก");
+    text = text.replace(/ขอบคุณนะ/g, "ขอบคุณ");
+    text = text.replace(/กันมาที่การ/g, "กรรมาธิการ");
+    text = text.replace(/กรรมาธิการตำรวจ/g, "กรรมาธิการการกฎหมาย การยุติธรรม และการตำรวจ");
+    text = text.replace(/คณะมนตรี/g, "คณะรัฐมนตรี");
+    text = text.replace(/ได้ไง/g, "ได้อย่างไร");
+    text = text.replace(/ด็อกเตอร์/g, "ดอกเตอร์");
+    text = text.replace(/Application/g, "แอปพลิเคชัน");
+    text = text.replace(/แอปพลิเคชั่น/g, "แอปพลิเคชัน");
+    text = text.replace(/คอร์รัปชั่น/g, "คอร์รัปชัน");
+    text = text.replace(/คอรัปชั่น/g, "คอร์รัปชัน");
+    text = text.replace(/App/g, "app");
+    text = text.replace(/00,000/g, " แสน");
+    text = text.replace(/000,000/g, " ล้าน");
+    text = text.replace(/เยอรมัน/g, "เยอรมนี");
+    text = text.replace(/เอกสารสิทธิ์/g, "เอกสารสิทธิ");
+    text = text.replace(/สิทธิ์ม/g, "สิทธิม");
+    text = text.replace(/สิทธิขาด/g, "สิทธิ์ขาด");
+    text = text.replace(/ลิขสิทธิ/g, "ลิขสิทธิ์");
+    text = text.replace(/กรรมสิทธิ/g, "กรรมสิทธิ์");
+    text = text.replace(/สงวนสิทธิ/g, "สงวนสิทธิ์");
+    text = text.replace(/สละสิทธิ/g, "สละสิทธิ์");
+    text = text.replace(/ศักดิ์สิทธิ/g, "ศักดิ์สิทธิ์");
+    text = text.replace(/ไงบ้าง/g, "อย่างไรบ้าง");
+    text = text.replace(/เป็นไง/g, "เป็นอย่างไร");
+    text = text.replace(/พร้อมเพียง/g, "พร้อมเพรียง");
+    text = text.replace(/ค่าลด/g, "ค่ารถ");
+
+
+    //สิ้นสุดช่วงแก้ไขคำ 
+
+    // เปลี่ยน " น " เป็น " นาฬิกา "
+    text = text.replace(/(\d{2}):(\d{2})\s+น\s+/g, "$1.$2 นาฬิกา ");
+
+    //alert("แก้ไขข้อความเรียบร้อยแล้ว!"); 
+    // สร้างแถบสถานะ
+    var statusElement = document.createElement("div");
+    statusElement.textContent = "แก้ไขข้อความเรียบร้อยแล้ว!";
+    statusElement.classList.add("status-bar"); // เพิ่มคลาสสำหรับใส่ CSS
+    document.body.appendChild(statusElement);
+
+    // หายไปใน 7 วินาที
+      setTimeout(function() {
+      statusElement.style.display = "none";
+    }, 7000);
+
+    return text;
+}
+
+  
+    function findAndAlertErrors() {
+      
+      var searchTexts = [
+      "ตามาตรา", "มีมี", "จเรณักณิ์","บชก.","แยกยะ","สุดอันท้าย","กลไกล","กำหราบ","สุโขทั่ว","ส่งข้าว","บังคับบัญชี",
+  "๒๕๒๕๖๕","สวรรณี","ครับครับ","หน่วนงาน","พรก.","พรป.","ประโต","แลกหน้า","ชั่งสังเกต","ป.ป.ง.",
+  "เราได้เราได้","ภูธรณ์","พาณิชย์นาวี","ทรุดโซม","เสื่อมโซม", "องค์การปกครองส่วนท้องถิ่น","กระทรวงพัฒนาสังคมและความมั่นคงของมนุษย์","ช่อโกง","องค์กรบริหารส่วนตำบล" , "วิพากย์วิจารณ์","อิสระภาพ" ,"ประทะ","อนุญาติ","ญาตพี่น้อง","ใต้ฝุ่น","กงศุล","กระทันหัน","กระเหรี่ยง","กระโหลก","กระลา","กำเน็จ","เกษียน","เกษียร","ประชาชา","จบคน","กราบของพระคุณ","ของพระคุณ","ตามา","แบตเตอร์รี่","จากองทุน","ศรัทรา","ศัทรา","กิตมศักดิ์","วีดีโอ","วีดิโอ","วีดีทัศน์","วิดีทัศน์","เสมอภาพ","เฮลธ์ตี","เรือยอร์ช","ไซซ์","สแตนบาย","โควิด-๑๙","โควิด - ๑๙","เอกเซลเลนต์","แมพปิง","เรคคอร์ด","รอบครอบ","กู๊ดกัฟเวอร์นแนนซ์","ซิสเตม","ซอฟต์เพาเวอร์","ผู้ดำรำ","อุทร","ศาลอุทร","ปริญาโท","ภาวะการณ์","ธกส.","หาเรือ","ปีจำปี","จะจังต่อ","อนุมาตรา ๑๐","อนุมาตรา","คุณธรรท","ประบวนการ","รองทุกข์","วินิจใน","เสาร์","อกนาจ","รุสันดาป","มาตรม","โดยเฉพาะยิ่ง","สำนักงานวัตกรรม","วุฒิสมาชิก","คามเห็น","ร่วงม","กับกับ","สำนักงานวัตกรรม","ชัชวาล","iRaw","ผิงฝา","ขออง","หมาดไทย","ยึดหยุ่น","มากน้อง","ยาวนา","อ่อนแอยู่","is of doing","หลบหลี","เกิดขั้น","สำนักงานวุฒิสภา","เวรคืน","ความท้าท้าย","สาธารณะชน","เรื่องเรื่อง","เอาไง","ยังไง","อย่างงั้น","อย่างงี้","เยอรมัน","ล็อค","อิสราอีก","เจาจะ","ท่านท่าน","ล่วงน่า"
+
+  ];
+  
+  var suggestions = {
+    "ตามาตรา": "ตามมาตรา","จเรณักณิ์": "จเรศักณิ์","บชก.": "บช.ก.","แยกยะ": "แยกแยะ","กลไกล": "กลไก","กำหราบ": "กำราบ","สวรรณี": "สุวรรณี",
+    "พรก.": "พ.ร.ก.","พรป.": "พ.ร.ป.","ชั่งสังเกต": "ช่างสังเกต","ป.ป.ง.": "ปปง.","ช่อโกง": "ฉ้อโกง","ภูธรณ์": "ภูธร","พาณิชย์นาวี": "พาณิชยนาวี","ทรุดโซม": "ทรุดโทรม","เสื่อมโซม": "เสื่อมโทรม","องค์การปกครองส่วนท้องถิ่น": "องค์กรปกครองส่วนท้องถิ่น","กระทรวงพัฒนาสังคมและความมั่นคงของมนุษย์": "กระทรวงการพัฒนาสังคมและความมั่นคงของมนุษย์","องค์กรบริหารส่วนตำบล" : "องค์การบริหารส่วนตำบล","วิพากย์วิจารณ์": "วิพากษ์วิจารณ์","อิสระภาพ": "อิสรภาพ","ประทะ": "ปะทะ","อนุญาติ": "อนุญาต","ญาตพี่น้อง": "ญาติพี่น้อง","ใต้ฝุ่น": "ไต้ฝุ่น","กงศุล": "กงสุล","กระทันหัน": "กะทันหัน","กระเหรี่ยง": "กะเหรี่ยง","กระโหลก": "กะโหลก","กระลา": "กะลา","กำเน็จ": "กำเหน็จ","เกษียน": "เกษียณ","เกษียร": "เกษียณ","แบตเตอร์รี่": "แบตเตอรี่","ศรัทรา": "ศรัทธา","ศัทรา": "ศรัทธา","กิตมศักดิ์": "กิตติมศักดิ์","วีดีโอ": "วิดีโอ","วีดิโอ": "วิดีโอ","วีดีทัศน์": "วีดิทัศน์","วิดีทัศน์": "วีดิทัศน์","เสมอภาพ": "เสมอภาค","เฮลธ์ตี": "เฮลท์ตี","เรือยอร์ช":"เรือยอชต์","ไซซ์": "ไซส์","สแตนบาย": "สแตนด์บาย","โควิด-๑๙": "โควิด-19","เอกเซลเลนต์": "เอ็กเซลเลนต์","แมพปิง": "แมปปิง","เรคคอร์ด": "เรกคอร์ด","รอบครอบ": "รอบคอบ","กู๊ดกัฟเวอร์นแนนซ์": "กู๊ดกัฟเวอร์แนนซ์","ซิสเตม": "ซิสเต็ม","ซอฟต์เพาเวอร์": "ซอฟต์พาวเวอร์","ผู้ดำรำ": "ผู้ดำรง","อุทร": "อุทธรณ์ (อุทรเฉย ๆ แปลว่าท้อง)","ศาลอุทร": "ศาลอุทธรณ์","ภาวะการณ์": "ภาวการณ์","ธกส.": "ธ.ก.ส.","หาเรือ": "หาเรือ หรือหารือ","ปีจำปี": "ประจำปี หรือเปล่า","จะจังต่อ": "จะแจ้งต่อ","อนุมาตรา ๑๐": "(๑๐)","อนุมาตรา": "อาจจะเป็นวงเล็บ","เสาร์": "วันเสาร์ หรือ เสาไฟ","รุสันดาป": "รถสันดาป","มาตรม": "มาตรา","โดยเฉพาะยิ่ง": "โดยเฉพาะอย่างยิ่ง","สำนักงานวัตกรรม": "สำนักงานนวัตกรรม","วุฒิสมาชิก": "สมาชิกวุฒิสภา","คามเห็น": "ความเห็น","ร่วงม": "ร่วม","กับกับ": "กับ","ชัชวาล": "ชัชวาลย์","iRaw": "iLaw","ผิงฝา": "พิงฝา","ขออง": "ของ","หมาดไทย": "มหาดไทย","ยึดหยุ่น": "ยืดหยุ่น","มากน้อง": "มากน้อย","ยาวนา": "ยาวนาน","อ่อนแอยู่": "อ่อนแออยู่","is of doing": "ease of doing","หลบหลี": "หลบหนี","เกิดขั้น": "เกิดขึ้น","สำนักงานวุฒิสภา": "สำนักงานเลขาธิการวุฒิสภา","เวรคืน": "เวนคืน","ความท้าท้าย": "ความท้าทาย","สาธารณะชน": "สาธารณชน","เยอรมัน":"เยอรมนี","ล็อค":"ล็อก","อิสราอีก" : "อิสราเอล" , "เจาจะ" : "เขาจะ" , "ล่วงน่า" : "ล่วงหน้า" , 
+
+
+      };
+
+      var text = document.getElementById("textInput").value;
+      var foundKeywords = [];
+
+      searchTexts.forEach(function(searchText) {
+        var regex = new RegExp(searchText, "gi");
+        if (text.match(regex)) {
+          foundKeywords.push(searchText);
+        }
+      });
+
+      var message = "พบคำผิดต่อไปนี้\n\n";
+      
+      if (foundKeywords.length > 0) {
+        foundKeywords = foundKeywords.filter(function(keyword, index, self) {
+          return self.indexOf(keyword) === index;
+        });
+
+        foundKeywords.forEach(function(keyword) {
+          var errorCount = text.match(new RegExp(keyword, "gi")).length;
+          var suggestion = suggestions[keyword] || "ปรับแก้ไข";
+          message += "คำที่ผิด : " + keyword + " (" + errorCount + " แห่ง)\nคำแนะนำ : " + suggestion + "\n\n";
+        });
+      } else {
+        message += "ไม่พบคำผิดในข้อความนี้";
+      }
+
+      alert(message);
+    }
+
+
+  function copyText() {
+    var textArea = document.getElementById("textInput");
+    textArea.select();
+    document.execCommand("copy");
+
+        // สร้างแถบสถานะ
+        var statusElement = document.createElement("div");
+    statusElement.textContent = "คัดลอกข้อความทั้งหมดแล้ว!";
+    statusElement.classList.add("status-bar"); // เพิ่มคลาสสำหรับใส่ CSS
+    document.body.appendChild(statusElement);
+
+    // หายไปใน 7 วินาที
+      setTimeout(function() {
+      statusElement.style.display = "none";
+    }, 7000);
+
+    }
+            // เพิ่มฟังก์ชันเพื่อบันทึกข้อความลงใน localStorage
+            function saveToLocalStorage(text) {
+            localStorage.setItem("savedText", text);
+        }
+
+        var textEditor = document.getElementById("textInput");
+        textEditor.addEventListener('keyup', function() {
+            saveToLocalStorage(textEditor.value);
+        });
+
+        window.onload = function() {
+            var savedText = localStorage.getItem('savedText');
+            if (savedText !== null) {
+                document.getElementById('textInput').value = savedText;
+            }
+        };
+        function confirmClearText() {
+      if (confirm("ต้องการล้างข้อความหรือไม่?")) {
+        clearText();
+      }
+    }
+
+    //นาฬิกา
+    function updateClock() {
+    var now = new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+    var timeString = 
+        ('0' + hours).slice(-2) + ':' + 
+        ('0' + minutes).slice(-2) + ':' + 
+        ('0' + seconds).slice(-2);
+
+    document.getElementById('clock').textContent = timeString;
+}
+
+setInterval(updateClock, 1000);
+updateClock(); // เรียกทันทีเพื่อไม่ให้มีการหน่วงเวลา
+
+function adjustClipboardHeight() {
+    var textInput = document.getElementById('textInput');
+    var clipboard = document.getElementById('clipboard');
+    clipboard.style.height = textInput.offsetHeight + 'px';
+}
+
+window.onload = adjustClipboardHeight;
+window.onresize = adjustClipboardHeight;
+
+    function clearText() {
+  // ล้างเนื้อหาของ textarea
+  var textEditor = document.getElementById("textInput");
+  textEditor.value = "";
+
+  // ลบข้อมูล textareaContent จาก localStorage, sessionStorage, หรือ cookies
+  localStorage.removeItem('savedText'); // ลบข้อมูลใน localStorage
+  sessionStorage.removeItem('savedText'); // ลบข้อมูลใน sessionStorage
+
+
+  // รีเซ็ตตัวแปร currentTextareaContent
+  currentTextareaContent = "";
+}
+
+  </script>
+</body>
+
+</html>

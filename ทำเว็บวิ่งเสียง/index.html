@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech Recognition Web</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Speech Recognition Web</h1>
+  <div class="controls">
+    <button id="startButton">Start Speech Recognition</button>
+    <button id="stopButton" disabled>Stop Speech Recognition</button>
+  </div>
+  <div class="output-container">
+    <div id="output"></div>
+    <textarea id="recognizedText" rows="5" cols="50" readonly></textarea>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/speechkitt.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clipboard-like Webpage</title>
+<style>
+
+    /* CSS styles */
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    #clipboard {
+        max-width: 100%;
+        width: 400px; /* ขนาดเริ่มต้น */
+        height: 700px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        float: right; /* จัดวางด้านขวา */
+        border-radius: 10px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        /* เปลี่ยนขนาดของคลิปบอร์ดเมื่อหน้าจอเล็กกว่า 600px */
+        #clipboard {
+            width: 90%; /* ปรับความกว้างให้เต็มขอบตามขนาดหน้าจอ */
+            height: 90%;
+        }
+    }
+
+    @media only screen and (max-width: 400px) {
+        /* เปลี่ยนขนาดของคลิปบอร์ดเมื่อหน้าจอเล็กกว่า 400px */
+        #clipboard {
+            width: 95%; /* ปรับความกว้างให้เต็มขอบตามขนาดหน้าจอ */
+            height: 95%;
+        }
+    }
+
+    h2, h3 {
+        margin-top: 0;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    li span {
+        cursor: pointer;
+    }
+
+    button {
+        margin-left: 5px;
+    }
+
+    button.edit, button.delete {
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+    .delete {
+        float: right;
+    }
+
+    .edit {
+        float: right;
+    }
+
+    button.edit, button.delete {
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+</style>
+</head>
+<body>
+    <h2>Clipboard-like Webpage</h2>
+    <div id="clipboard">
+        <h3>Clipboard</h3>
+        <button onclick="addItem()">Add Item</button>
+        <button onclick="clearAll()">Clear All</button> <!-- Clear All button -->
+        <ul id="clipList">
+            <!-- List items will be added dynamically -->
+        </ul>
+    </div>
+
+<script>
+function addItem() {
+    var items = prompt("Enter items separated by Enter:");
+    if (items !== null && items.trim() !== "") {
+        var clipList = document.getElementById("clipList");
+        items.split("\n").forEach(function(item) {
+            if (item.trim() !== "") {
+                var li = document.createElement("li");
+                var span = document.createElement("span");
+                span.textContent = item.trim();
+                span.onclick = function() {
+                    copyToEditor(span);
+                };
+                li.appendChild(span);
+
+                var deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "❌";
+                deleteBtn.className = "delete";
+                deleteBtn.onclick = function() {
+                    clipList.removeChild(li);
+                };
+                li.appendChild(deleteBtn);
+
+                clipList.appendChild(li);
+
+                var editBtn = document.createElement("button");
+                editBtn.textContent = "✎";
+                editBtn.className = "edit";
+                editBtn.onclick = function() {
+                    var textEditor = document.createElement("textarea");
+                    textEditor.value = span.textContent;
+                    textEditor.style.width = "99%"; // กำหนดความกว้างของ textarea ให้เต็มตาม li
+                    textEditor.style.height = "30px"; // กำหนดความสูงของ textarea ให้เป็น 50px (ตั้งค่าตามต้องการ)
+                    li.replaceChild(textEditor, span);
+                    textEditor.focus();
+
+                    textEditor.onblur = function() {
+                        span.textContent = textEditor.value;
+                        li.replaceChild(span, textEditor);
+                        editBtn.style.display = 'inline';
+                        deleteBtn.style.display = 'inline';
+                    };
+
+                    editBtn.style.display = 'none';
+                    deleteBtn.style.display = 'none';
+                };
+                li.appendChild(editBtn);
+            }
+        });
+    } else {
+        alert("Please enter at least one valid item!");
+    }
+}
+
+function copyToEditor(item) {
+    var textEditor = document.getElementById("textEditor");
+    textEditor.value += item.textContent + "";
+    textEditor.focus();
+}
+
+function clearAll() {
+    var clipList = document.getElementById("clipList");
+    clipList.innerHTML = ""; // Clear all items
+}
+</script>
+</body>
+</html>
